@@ -44,6 +44,16 @@ def report():
         'uptime_seconds': round(time.time() - START_TIME, 2)
     })
 
+@app.get('/api/env')
+def environment_profile():
+    # Reads the active environment, defaulting to 'development' if not set
+    current_env = os.environ.get('FLASK_ENV', 'development')
+    return jsonify({
+        'environment': current_env,
+        'debug_mode': app.debug,
+        'storage_configured': os.path.exists('config.json')
+    })
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
