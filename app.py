@@ -54,6 +54,16 @@ def environment_profile():
         'storage_configured': os.path.exists('config.json')
     })
 
+@app.get('/api/status')
+def status():
+    cfg = load_config()
+    routes = sorted(str(rule) for rule in app.url_map.iter_rules())
+    return jsonify({
+        'app_name': cfg['app_name'],
+        'version': cfg['version'],
+        'routes': routes
+    })
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
